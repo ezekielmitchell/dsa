@@ -9,6 +9,18 @@ public:
     string title;
     double salary;
     int id;
+
+    Job(string title, double salary, int id) {
+        this->title = title;
+        this->salary = salary;
+        this->id = id;
+    }
+
+    Job(Job* job) {
+        this->title = job->title;
+        this->salary = job->salary;
+        this->id = job->id;
+    }
 };
 
 void printJob(Job job) {

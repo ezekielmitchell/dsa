@@ -57,6 +57,21 @@ class LinkedList {
         }
 
         bool insert(int index, int value) { // create new node
+            if(index < 0 || index > length) return false;
+
+            if (index == 0) {
+                append(value);
+                return true;
+            }
+
+            Node* newNode = new Node(value);
+            Node* temp = get(index-1);
+
+            newNode->next = temp->next;
+            temp->next = newNode;
+            length++;
+
+            
             return true;
         }
 
@@ -149,12 +164,55 @@ class LinkedList {
         return temp;
     }
 
+    bool set(int index, int value) {
+        Node* temp = get(index);
+
+        if (temp) {
+            temp->value = value;
+            return true;
+        }
+
+        return false;
+        
+        
+    }
+
+    void deleteNode(int index) {
+        if (index < 0 || index >= length) return;
+
+        if (index == 0) return deleteFirst();
+
+        if (index == index-1) return deleteLast();
+
+        Node* prev = get (index-1);
+        Node* temp = prev->next;
+
+        prev->next = temp->next;
+        delete temp;
+        length--;
+
+    }
+    
+    void reverse() {
+        Node* temp = head;
+        head = tail;
+        tail = temp;
+
+        Node* after = temp->next;
+        Node* before = nullptr;
+
+        for (int i = 0; i < length; i++) {
+            after = temp->next;
+            temp->next = before;
+            before = temp;
+            temp = after;
+        }
+    }
+    
     private:
         Node* head;
         Node* tail;
         int length;
-        
-
 };
 
 int main() {
@@ -181,7 +239,15 @@ int main() {
 
     trail->printList();
 
-    cout << trail->get(4)->value << endl;
+    trail->set(2, 33);
+    trail->printList();
+
+    trail->insert(2, 100);
+    trail->printList();
+
+    trail->reverse();
+    trail->printList();
+
 
     // LinkedList* trailOne = new LinkedList(1);
     // trailOne->printList();
