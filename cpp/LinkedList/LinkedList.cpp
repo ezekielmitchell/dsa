@@ -108,9 +108,6 @@ class LinkedList {
 
         }
 
-        // create new node at INDEX
-        bool insert(int index, int value) {}
-
         void getHead() {
             cout << "Head: " << head->value << endl;
         }
@@ -134,15 +131,15 @@ class LinkedList {
             return temp;
         }
 
-        void set(int index, int value) {
-            if (index<0 || index >= length) return;
+        bool set(int index, int value) {
+            Node* temp = get(index);
 
-            Node* temp = head;
-            for (int i=0; i<index; i++) {
-                temp = temp->next;
+            if(temp) {
+                temp->value = value;
+                return true;
             }
 
-            temp->value = value;
+            return false;
 
         }
 
