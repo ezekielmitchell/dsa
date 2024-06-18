@@ -25,13 +25,34 @@ void printMoreItems(int i) {
 }
 
 // O(log n) time complexity because the function runs log(n) amount of times
-void printItemLog(int n){}
+// data must be sorted for binary search and the time complexity is O(log n)
+void printItemLog(int n){
+
+}
 
 // Drop constants and non-dominant terms
 // O(2n) -> O(n), O(n^2 + 3n + 100 + log(n)) -> O(n^2), O(1000) -> O(1), O(2^n + n^2) -> O(2^n)
 
+// O(a + b) time complexity because the function runs 'a' amount of times and 'b' amount of times
+void printItemsTwo(int a, int b) {
+    for (int i=0; i<a; i++) {
+        cout << i << endl;
+    }
+    for (int j=0; j<b; j++) {
+        cout << j << endl;
+    }
+}
+
+// O(a * b) time complexity because the function runs 'a' amount of times and 'b' amount of times
+void printItemsThree(int a, int b) {
+    for (int i=0; i<a; i++) {
+        for (int j=0; j<b; j++) {
+            cout << i << j << endl;
+        }
+    }
+}
 
 int main() {
-    printItem(5);
+    printItemsThree(1, 2); // O(1 * 2) -> O(2)
     return 0;
 }

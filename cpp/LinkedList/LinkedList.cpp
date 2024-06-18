@@ -1,83 +1,43 @@
 #include <iostream>
-#include <vector>
-#include <string>
 
 using namespace std;
 
-// A linked list is a data structure that consists of a sequence of elements where each element is a node that contains a value and a reference to the next node in the sequence.
-
-// A node is a basic unit of a linked list that contains two parts: data and a reference to the next node in the sequence.
-
-
 class Node {
-
     public:
-    int value;
-    Node* next;
-
-    Node(int value) {
-        this->value = value;
-        this->next = nullptr;
-    }
-
+        int value;
+        Node* next;
+        
+        Node(int value) {
+            this->value = value;
+            next = nullptr;
+        }
 };
 
-class LinkedList {
-
+class LinkedList { 
+    private:// c++ classes are private by default
+        Node* head;
+        Node* tail;
+        int length;
+        
     public:
 
-        LinkedList (int value) { // create new node
+        LinkedList() {
+            head = nullptr;
+            tail = nullptr;
+            length = 0;
+        }
+
+        // create first node
+        LinkedList(int value) {
             Node* newNode = new Node(value);
             head = newNode;
             tail = newNode;
             length = 1;
         }
 
-        ~LinkedList() {
+        // print list
+        void printList(){
             Node* temp = head;
-
-            while(head) {
-                head = head->next;
-                delete temp;
-                temp=head;
-            }
-        }
-
-        void append(int value) { // create new node
-            Node* newNode = new Node(value);
-
-            if (length == 0) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail->next = newNode;
-                tail = newNode;
-            }
-            length++;
-        }
-
-        bool insert(int index, int value) { // create new node
-            if(index < 0 || index > length) return false;
-
-            if (index == 0) {
-                append(value);
-                return true;
-            }
-
-            Node* newNode = new Node(value);
-            Node* temp = get(index-1);
-
-            newNode->next = temp->next;
-            temp->next = newNode;
-            length++;
-
-            
-            return true;
-        }
-
-        void printList() {
-            Node* temp = head;
-            
             while (temp) {
                 cout << temp->value << " ";
                 temp = temp->next;
@@ -85,179 +45,138 @@ class LinkedList {
             cout << endl;
         }
 
+        // create new node at END
+        void append(int value) {
+            Node* newNode = new Node(value);
+            if (head) {
+                tail->next = newNode;
+                tail = newNode;
+            } else {
+                Node* newNode = new Node(value);
+                head, tail = newNode;
+            }
+            length++;
+        }
+
+        void deleteLast() { // delete last
+
+            if (length == 0) return;
+            
+            Node* temp = head;
+            
+            if (length==1) {
+                head = nullptr;
+                tail = nullptr;
+            } else {
+                Node* pre = head;
+                while (temp->next) {
+                pre = temp;
+                temp = temp->next;
+            }
+            tail = pre;
+            tail->next=nullptr;            
+            }
+            
+            delete temp;
+            length--;
+        }
+        
+        void deleteFirst() { // delete first node
+            if (length==0) return;
+            Node* temp = head;
+            if (length==1) {
+                head, tail = nullptr;
+            } else {
+                head = head->next;
+                temp = nullptr;
+            }
+            delete temp;
+            length--;
+        }
+
+        // create new node at BEGINNING
+        void prepend(int value) {
+            Node* newNode = new Node(value);
+
+            if (length==0) {
+                head, tail = newNode;
+            } else {
+                newNode->next = head;
+                head = newNode;
+            }
+            length++;
+
+        }
+
+        // create new node at INDEX
+        bool insert(int index, int value) {}
+
         void getHead() {
-            cout << "Head: " << head->value;
+            cout << "Head: " << head->value << endl;
         }
 
         void getTail() {
-            cout << "Tail: " << tail->value;
+            cout << "Tail: " << tail->value << endl;
         }
 
         void getLength() {
             cout << "Length: " << length;
         }
 
-        void deleteLast() {
-            if (length==0) return;
+        Node* get(int index) {
+            if (index<0 || index >= length) nullptr;
 
             Node* temp = head;
-
-            if (length == 1) {
-                head = nullptr;
-                tail = nullptr;
-            } else {
-                Node* pre = head;
-                
-                while (temp->next) {
-                    pre = temp;
-                    temp = temp->next;
-                }
-
-                tail = pre;
-                tail->next = nullptr;
+            for (int i=0; i<index; i++) {
+                temp = temp->next;
             }
 
-        length--;
-        delete temp;
-
-    }
-
-    void prepend(int value) {
-        Node* newNode = new Node(value);
-
-        if (length==0) {
-            head = newNode;
-            tail = newNode;
-        } else {
-            newNode->next = head;
-            head = newNode;
+            return temp;
         }
 
-        length++;
-    }
+        void set(int index, int value) {
+            if (index<0 || index >= length) return;
 
-    void deleteFirst() {
-        if (length==0) return;
+            Node* temp = head;
+            for (int i=0; i<index; i++) {
+                temp = temp->next;
+            }
 
-        Node* temp = head;
-
-        if (length==1) {
-            head = nullptr;
-            tail = nullptr;
-        } else {
-            head = head->next;
-        }
-
-        delete temp;
-        length--;
-
-    }
-
-    Node* get(int index) {
-        if (index < 0 || index >= length) return nullptr;
-        
-        Node* temp = head;
-        for (int i = 0; i < index; i++) {
-            temp = temp->next;
-        }
-
-        return temp;
-    }
-
-    bool set(int index, int value) {
-        Node* temp = get(index);
-
-        if (temp) {
             temp->value = value;
-            return true;
+
         }
 
-        return false;
-        
-        
-    }
-
-    void deleteNode(int index) {
-        if (index < 0 || index >= length) return;
-
-        if (index == 0) return deleteFirst();
-
-        if (index == index-1) return deleteLast();
-
-        Node* prev = get (index-1);
-        Node* temp = prev->next;
-
-        prev->next = temp->next;
-        delete temp;
-        length--;
-
-    }
-    
-    void reverse() {
-        Node* temp = head;
-        head = tail;
-        tail = temp;
-
-        Node* after = temp->next;
-        Node* before = nullptr;
-
-        for (int i = 0; i < length; i++) {
-            after = temp->next;
-            temp->next = before;
-            before = temp;
-            temp = after;
+        void getInfo() {
+            getHead();
+            getTail();
+            getLength();
+            cout << endl;
         }
-    }
-    
-    private:
-        Node* head;
-        Node* tail;
-        int length;
+
+        // Destructor
+        ~LinkedList(){
+            Node* temp = head;
+            while (head) {
+                head = head->next;
+                delete temp;
+                
+            }
+        }
 };
 
 int main() {
 
-    LinkedList* trail = new LinkedList(26);
-    trail->append(20);
-    trail->append(30);
-    trail->append(12);
-    trail->append(654);
-
-    trail->printList();
-
-    trail->deleteLast();
-    
-    trail->printList();
-
-    trail->deleteFirst();
-    trail->printList();
-    trail->deleteFirst();
-    trail->printList();
-
-    trail->append(2);
-    trail->append(22);
-
-    trail->printList();
-
-    trail->set(2, 33);
-    trail->printList();
-
-    trail->insert(2, 100);
-    trail->printList();
-
-    trail->reverse();
-    trail->printList();
+    LinkedList* myList = new LinkedList(22);
+    myList->append(1);
+    myList->append(26);
+    myList->printList();
+    myList->getInfo();
+    cout << "----" << endl;
+    myList->set(2, 32);
+    myList->printList();
+    cout << "----" << endl;
+    myList->getInfo();
 
 
-    // LinkedList* trailOne = new LinkedList(1);
-    // trailOne->printList();
-    // trailOne->deleteLast();
-    // trailOne->printList();
-    // trailOne->prepend(1);
-    // trailOne->prepend(2);
-    // trailOne->printList();
-
-
-    
     return 0;
 }
